@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project 1 - Shivakiran Nandala</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+    }
+
+    header {
+      background: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #667eea;
+    }
+
+    .back-link {
+      text-decoration: none;
+      background: #667eea;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      transition: 0.3s;
+    }
+
+    .back-link:hover {
+      background: #764ba2;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #667eea;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      line-height: 1.7;
+      color: #555;
+    }
+
+    .code-block {
+      background: #1e1e1e;
+      color: #dcdcdc;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-top: 1.5rem;
+      overflow-x: auto;
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+
+    .result-block {
+      background: #f8f9fa;
+      border-left: 5px solid #667eea;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    .result-block h2 {
+      margin-top: 0;
+      color: #764ba2;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Shivakiran Nandala</div>
+  </header>
+
+  <div class="container">
+    <h1>Project 1: Counting Sort Implementation</h1>
+    <p>
+      This project demonstrates the implementation of the **Counting Sort algorithm** in Java. 
+      Counting Sort is an efficient algorithm for sorting integers when the range of numbers is not significantly larger than the number of elements.
+    </p>
+
+    <h2>Features:</h2>
+    <ul>
+      <li>Reads input dynamically from the user</li>
+      <li>Finds the maximum value in the array</li>
+      <li>Uses counting technique for efficient sorting</li>
+      <li>Outputs the sorted array</li>
+    </ul>
+
+    <h2>Source Code:</h2>
+    <pre class="code-block">
+import java.util.*;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class PrimBellFordAlgo {
+    ArrayList<Node> nodes;
+    ArrayList<Node> minPriorityQueue;
+
+    // Used to apply Bellman-Ford Algorithm
+    public static void BellmanFord_Method(int[] weight, int[][] edge, int n, int v, int sum) {
+        int[] source = new int[n];
+
+        // Setting the Weights from source to nodes as Infinite(Maximum Possible Value)
+        // and source as 0...
+        System.out.println("\nIntializing Bellman-Ford Algorithm...");
+        for (int i = 0; i <= (n - 1); i++) {
+            source[i] = Integer.MAX_VALUE;
+        }
+        source[0] = 0;
+        System.out.println("\nIntial Source and Edge Weight Values. . .");
+        System.out.println(Arrays.toString(source));
+        System.out.println("\n");
+        System.out.println("Solving...");
+
+        // Relaxing all edges (v-1) times...
+        // We are iterating it tell v times to print the Final iteration in Negative
+        // Edge condition case(At the cost of increased complexity)...
+        for (int i = 0; i < (v); ++i) {
+
+            for (int j = 0; j <= (v - 1); j++) {
+                int k = 0;
+                if ((source[edge[j][k]] + weight[edge[j][k]]) < (source[edge[j][k + 1]])) {
+                    source[edge[j][k + 1]] = source[edge[j][k]] + weight[edge[j][k]];
+                }
+            }
+            // Printing Iterations...
+            System.out.print("Iteration :");
+            System.out.print((i + 1));
+            System.out.print("\t\t");
+            System.out.println(Arrays.toString(source));
+        }
+        // Printing Output...
+        if (sum >= 0) {
+            System.out.println("\n\nThe Final Solution is :");
+        } else {
+            System.out.println("\n\nThe Final Iteration is :");
+        }
+        System.out.println(Arrays.toString(source));
+    }
+
+    public PrimBellFordAlgo() {
+        nodes = new ArrayList<>();
+        minPriorityQueue = new ArrayList<>();
+
+    }
+
+    // Below logic used to adds a node to the graph by adding it
+    public void addNode(Node node) {
+        nodes.add(node);
+        minPriorityQueue.add(node);
+        Collections.sort(minPriorityQueue, Comparator.comparingInt(n -> n.distance));
+        updateParentAnddistance(node, null, Integer.MAX_VALUE);
+    }
+
+    // Below logic used to removes a node from the graph by removing it
+    public void removeNode(Node node) {
+        nodes.remove(node);
+        minPriorityQueue.remove(node);
+
+    }
+
+    // Below logic used to extract an element from the min-priority queue
+    public Node extractMin() {
+        if (minPriorityQueue.isEmpty()) {
+            return null;
+        }
+        Node minNode = minPriorityQueue.get(0);
+        minPriorityQueue.remove(0);
+        return minNode;
+    }
+
+    // To update the parent and distance values of a node
+    public void updateParentAnddistance(Node node, Node parent, int distance) {
+        node.parent = parent;
+        node.distance = distance;
+    }
+
+    // To fetch the parent values of a node
+    public Node getParent(Node node) {
+        return node.parent;
+    }
+
+    // To fetch the distance values of a node
+    public int getdistance(Node node) {
+        return node.distance;
+    }
+
+    public static class Node {
+
+        Node parent;
+        int distance;
+
+        // node name
+        String label;
+
+        // adjacentNodes = Pair connected node + weight
+        HashMap<Node, Integer> adjacentNodes;
+
+        public Node() {
+            label = "";
+            adjacentNodes = new HashMap<Node, Integer>();
+        }
+
+        public Node(String name) {
+            label = name;
+            adjacentNodes = new HashMap<Node, Integer>();
+        }
+
+        // Used to add a connection
+        public void addConnection(Node node, int weight) {
+            adjacentNodes.put(node, weight);
+            node.distance = weight;
+
+        }
+
+        // Used for removing a connection
+        public void removeConnection(Node node) {
+            adjacentNodes.remove(node);
+        }
+
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+            Node other = (Node) obj;
+            return label.equals(other.label);
+        }
+
+        public int hashCode() {
+            return Objects.hash(label);
+        }
+    }
+
+    // to find the minimum spanning tree of the graph using Prim's algorithm
+    public List<Node> primMST() {
+        List<Node> mst = new ArrayList<>();
+        boolean[] visited = new boolean[nodes.size()];
+        PriorityQueue<Node> minHeap = new PriorityQueue<>(Comparator.comparingInt(node -> node.distance));
+
+        Node startNode = nodes.get(0);
+        updateParentAnddistance(startNode, null, 0);
+        minHeap.offer(startNode);
+
+        while (!minHeap.isEmpty()) {
+            Node minNode = minHeap.poll();
+            visited[nodes.indexOf(minNode)] = true;
+            mst.add(minNode);
+
+            for (Map.Entry<Node, Integer> entry : minNode.adjacentNodes.entrySet()) {
+                Node adjacentNode = entry.getKey();
+                int weight = entry.getValue();
+
+                if (!visited[nodes.indexOf(adjacentNode)] && weight < adjacentNode.distance) {
+
+                    updateParentAnddistance(adjacentNode, minNode, weight);
+                    minHeap.offer(adjacentNode);
+                }
+            }
+        }
+
+        return mst;
+    }
+
+    // It prints the edges of the MST.
+    public void printMST(List<Node> mst) {
+        System.out.println("Minimum Spanning Tree edges:");
+        for (Node node : mst) {
+            Node parent = getParent(node);
+            int weight = getdistance(node);
+            if (parent != null) {
+                System.out.println(parent.label + " - " + node.label + " (" + weight + ")");
+            }
+        }
+    }
+
+    public void printGraphWithMSTToFile(List<Node> mst, String filename) {
+        try {
+            FileWriter writer = new FileWriter(filename);
+
+            writer.write("graph G {\n");
+            writer.write("    edge [color=black];\n");
+
+            // It Prints MST edges with color green for below logic
+            for (Node node : mst) {
+                Node parent = getParent(node);
+                int weight = getdistance(node);
+                if (parent != null) {
+                    writer.write(String.format("    %s -- %s [label=\"%d\", color=\"green\"];\n", parent.label,
+                            node.label, weight));
+                }
+            }
+
+            // It Prints Non-MST edges with color black for below logic
+            for (Node node : nodes) {
+                for (Map.Entry<Node, Integer> entry : node.adjacentNodes.entrySet()) {
+                    Node adjacentNode = entry.getKey();
+                    int weight = entry.getValue();
+                    if (!mst.contains(node) || !mst.contains(adjacentNode)) {
+                        writer.write(String.format("    %s -- %s [label=\"%d\", color=\"black\"];\n", node.label,
+                                adjacentNode.label, weight));
+                    }
+                }
+            }
+
+            writer.write("}");
+
+            writer.close();
+            System.out.println("Output written to " + filename);
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
+
+    // It is a main function used to generate PRIMS and Bellman-Ford Algorithm for
+    // any value which we
+    // enter after running the code
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Choose an Algotithm\n 1 for Prims Algorithm.\n 2 for Bellman-Ford Algorithm");
+        int opt = input.nextInt();
+        if (opt == 2) {
+            try (Scanner scanner = new Scanner(System.in)) {
+                // Getting No of Nodes/ Verices/ Elements...
+                System.out.println("\nBellman-Ford Algorithm\n\nEnter the Number of Nodes :");
+                int n = scanner.nextInt();
+
+                // Getting No oF Edges/ Co-Ordinates...
+                System.out.println("\nEnter the Number of Edges :");
+                int v = scanner.nextInt();
+
+                // Getting the Edge Values...(x y), where x is sorce node and y is destination
+                // node...
+                int[][] edge = new int[v][2];
+                System.out.println("Enter the values of each Edge (source, Destination) in this format: 1 2 ");
+                for (int i = 0; i < v; i++) {
+                    edge[i][0] = scanner.nextInt();
+                    edge[i][1] = scanner.nextInt();
+                }
+
+                // Getting the Weight Values...
+
+                int[] weight = new int[n];
+                System.out.println("\nEnter the values of each DIrected Edge Weight: (as in example)\na\nb\nc\n");
+
+                for (int j = 0; j < n; j++) {
+                    weight[j] = scanner.nextInt();
+                }
+
+                // To check if the Edge condition is negative or Positive...
+
+                int sum = 0;
+                // Sum of elements in weight array...
+
+                for (int j = 0; j < weight.length; j++) {
+                    sum += weight[j];
+                }
+
+                // If the sum is Positive(including Zero) the Problem has a Positive Edge
+                // Condition and Viceversa...
+                if (sum >= 0) {
+                    System.out.println("\nThe Sum Value is Non-Negative : " + sum);
+                    System.out.println("\nHence the Edge Condition is Positive");
+                } else {
+                    System.out.println("\nThe sum value is Negative : " + sum);
+                    System.out.println("\nHence the Egde condition is Negative");
+                }
+                // Calling Bellman-Ford Method...
+                BellmanFord_Method(weight, edge, n, v, sum);
+            }
+
+        }
+
+        else if (opt == 1)
+
+        {
+            System.out.print("Enter the total number of nodes: ");
+            int nodeCount = input.nextInt();
+
+            PrimBellFordAlgo graph = new PrimBellFordAlgo();
+
+            System.out.println("Enter the edge values (source, destination, weight) in this format: 1 2 3");
+
+            for (int i = 0; i < nodeCount; i++) {
+                int source = input.nextInt();
+                int destination = input.nextInt();
+                int weight = input.nextInt();
+
+                Node sourceNode = graph.nodes.stream().filter(node -> node.label.equals(String.valueOf(source)))
+                        .findFirst()
+                        .orElse(new Node(String.valueOf(source)));
+                Node destinationNode = graph.nodes.stream()
+                        .filter(node -> node.label.equals(String.valueOf(destination)))
+                        .findFirst().orElse(new Node(String.valueOf(destination)));
+                sourceNode.addConnection(destinationNode, weight);
+                destinationNode.addConnection(sourceNode, weight);
+
+                graph.addNode(sourceNode);
+                graph.addNode(destinationNode);
+            }
+
+            List<Node> mst = graph.primMST();
+            graph.printMST(mst);
+
+            System.out.println("Choose an option:");
+            System.out.println("1. Print Minimum Spanning Tree of the graph");
+            System.out.println("2. Print the Graph with MST edges");
+            System.out.println("3. Print both Minimum Spanning Tree and Graph with MST");
+
+            int option = input.nextInt();
+
+            switch (option) {
+                case 1:
+                    graph.printMST(mst);
+                    break;
+                case 2:
+                    System.out.println("Enter the output filename:");
+                    String filename = input.next() + ".dot";
+                    graph.printGraphWithMSTToFile(mst, filename);
+                    break;
+                case 3:
+                    graph.printMST(mst);
+                    System.out.println();
+                    System.out.println("Enter the output filename:");
+                    filename = input.next() + ".dot";
+                    graph.printGraphWithMSTToFile(mst, filename);
+                    break;
+                default:
+                    System.out.println("Invalid option selected.");
+                    break;
+            }
+        }
+    }
+
+    </pre>
+
+    <div class="result-block">
+      <h2>Sample Output:</h2>
+      <pre>
+Choose an Algotithm
+ 1 for Prims Algorithm.
+ 2 for Bellman-Ford Algorithm
+1
+Enter the total number of nodes: 4
+Enter the edge values (source, destination, weight) in this format: 1 2 3
+1 2 4
+1 3 3
+2 3 2
+3 4 5
+Minimum Spanning Tree edges:
+1 - 3 (3)
+3 - 2 (2)
+3 - 2 (2)
+3 - 4 (5)
+Choose an option:
+1. Print Minimum Spanning Tree of the graph
+2. Print the Graph with MST edges
+3. Print both Minimum Spanning Tree and Graph with MST
+3
+Minimum Spanning Tree edges:
+1 - 3 (3)
+3 - 2 (2)
+3 - 2 (2)
+3 - 4 (5)
+
+Enter the output filename:
+shivakiran nandala
+Output written to shivakiran.dot
+graph G {
+    edge [color=black];
+    1 -- 3 [label="3", color="green"];
+    3 -- 2 [label="2", color="green"];
+    3 -- 2 [label="2", color="green"];
+    3 -- 4 [label="5", color="green"];
+}
+      </pre>
+    </div>
+  </div>
+</body>
+</html>

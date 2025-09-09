@@ -350,9 +350,9 @@
             <div class="about-content">
                 <div class="profile-placeholder fade-in">SN</div>
                 <div class="about-text fade-in">
-                    <p>Welcome to my portfolio! I'm Shivakiran Nandala, and I'm passionate about creating innovative projects and solutions.</p>
-                    <p>This website serves as a showcase for my various projects and achievements. Each project represents a unique challenge I've tackled and the creative solutions I've developed.</p>
-                    <p>Feel free to explore my work and don't hesitate to reach out if you'd like to collaborate or learn more about any of my projects.</p>
+                    <p>Welcome to my portfolio! I’m Shivakiran Nandala, a Master’s student in Digital Engineering with experience in machine learning, data pipelines, and predictive modeling. I enjoy working on projects that bring together data, engineering, and creativity to solve real-world problems.</p>
+                    <p>This site highlights some of my work - from NLP and time-series forecasting to data visualization and automation. Each project reflects my passion for learning, building, and turning ideas into practical solutions.</p>
+                    <p>Feel free to explore my projects, and don’t hesitate to reach out if you’d like to connect, collaborate, or discuss opportunities.</p>
                 </div>
             </div>
         </div>
@@ -363,35 +363,17 @@
             <h2 class="section-title fade-in">My Projects</h2>
             <div class="projects-grid">
                 <div class="project-card fade-in">
-                    <h3>Project 1</h3>
-                    <p>Brief description of your first project. You can update this section with your actual project details, technologies used, and achievements.</p>
-                    <a href="project1_list.html" class="project-link">View Project</a>
+                    <h3>AI Projects</h3>
+                    <p>A collection of my work in machine learning and AI</p>
+                    <a href="AIProject_list.html" class="project-link">View Projects</a>
+
                 </div>
                 <div class="project-card fade-in">
-                    <h3>Project 2</h3>
-                    <p>Description of your second project. This is where you'll add information about the project scope, your role, and the impact it made.</p>
-                    <a href="#" class="project-link">View Project</a>
+                    <h3>Algorithm & Data Structure Projects</h3>
+                    <p>A collection of my work in Algorithm & Data Structure</p>
+                    <a href="AlgoProject_list.html" class="project-link">View Projects</a>
                 </div>
-                <div class="project-card fade-in">
-                    <h3>Project 3</h3>
-                    <p>Details about your third project. Include key features, technologies used, and what makes this project special or unique.</p>
-                    <a href="#" class="project-link">View Project</a>
-                </div>
-                <div class="project-card fade-in">
-                    <h3>Project 4</h3>
-                    <p>Information about another project. You can add as many project cards as needed by copying this structure.</p>
-                    <a href="#" class="project-link">View Project</a>
-                </div>
-                <div class="project-card fade-in">
-                    <h3>Project 5</h3>
-                    <p>Description of your fifth project. Highlight the challenges faced and how you overcame them to deliver successful results.</p>
-                    <a href="#" class="project-link">View Project</a>
-                </div>
-                <div class="project-card fade-in">
-                    <h3>Project 6</h3>
-                    <p>Details about your sixth project. Mention any awards, recognition, or positive feedback received for this work.</p>
-                    <a href="#" class="project-link">View Project</a>
-                </div>
+               
             </div>
         </div>
     </section>
@@ -400,19 +382,19 @@
         <div class="container">
             <h2 class="section-title">Get In Touch</h2>
             <div class="contact-content fade-in">
-                <p>I'm always interested in hearing about new opportunities and projects. Feel free to reach out!</p>
+                <p>I'm always interested in hearing about new opportunities. Feel free to reach out!</p>
                 <div class="contact-info">
                     <div class="contact-item">
                         <p>📧 Email</p>
-                        <p>your.email@example.com</p>
+                        <p>shivakirannandala@gmail.com</p>
                     </div>
                     <div class="contact-item">
-                        <p>📱 LinkedIn</p>
-                        <p>linkedin.com/in/yourprofile</p>
+                        <p>📍 Location</p>
+                        <p>Weimar, Deutschland</p>
                     </div>
                     <div class="contact-item">
-                        <p>🌐 GitHub</p>
-                        <p>github.com/yourusername</p>
+                        <p>📱 Phone</p>
+                        <p>+49 163 5312765</p>
                     </div>
                 </div>
             </div>
@@ -421,7 +403,7 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 Shivakiran Nandala. All rights reserved.</p>
+            <p>&copy; 2025 Shivakiran Nandala. All rights reserved.</p>
         </div>
     </footer>
 
@@ -472,11 +454,180 @@
         const mobileMenu = document.querySelector('.mobile-menu');
         const navLinks = document.querySelector('.nav-links');
 
-        mobileMenu.addEventListener('click', function() {
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        if (mobileMenu) {
+            mobileMenu.addEventListener('click', function() {
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
+
+        // Project 1 Code Display Functions
+        function showProject1Code() {
+            const project1Code = `// Importing Libraries to read and Process Code...
+import java.util.Arrays;
+import java.util.Scanner;
+
+//Main Function 
+public class CountingSortCode {
+    public static void main(String[] args) {
+
+        // Taking Inputs [Number of Elements
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter the number of elements: ");
+        // Creating InputArray of Length a...
+        int a = input.nextInt();
+        int[] inputarray = new int[a];
+
+        // Taking Inputs Values from the User...
+        System.out.println("Enter the elements:");
+        // Storing Values in Array...
+        for (int i = 0; i < a; i++) {
+            inputarray[i] = input.nextInt();
+        }
+        input.close();
+
+        // "For Loop" Finding the maximum Element [k] in the Input Array...
+        int k = inputarray[0];
+        for (int i = 0; i < inputarray.length; i++) {
+            if (inputarray[i] > k)
+                k = inputarray[i];
+        }
+        System.out.println("Maximum value in the Array: " + k);
+
+        // Creating New Empty Arrays[SortedArray and ProcessingArray]...
+        int[] sortedarray = new int[a];
+        int[] proarray = new int[k + 1];
+
+        // "For Loop" for Counting all the Occurances in inputarray and storing in
+        // proarray[ProcessingArray]...
+        for (int i = 0; i < a; i++) {
+            proarray[inputarray[i]]++;
+        }
+        System.out.println("Proarray after counting occurances: " + Arrays.toString(proarray));
+
+        // "For Loop" for Calculating and storing the Cumilative sum in procarray...
+        for (int i = 1; i < k + 1; i++) {
+            proarray[i] += proarray[i - 1];
+            // Can also be Expresed as...
+            // proarray[i] = proarray[i] + proarray[i - 1];
+        }
+        System.out.println("Processing array: " + Arrays.toString(proarray));
+
+        // "For Loop" for sorting the InputArray by using ProccessingArray and storing
+        // the values in sortedarray[SortingArray] in sorted order...
+        for (int i = a - 1; i >= 0; i--) {
+            sortedarray[proarray[inputarray[i]] - 1] = inputarray[i];
+            proarray[inputarray[i]]--;
+        }
+        // Printing the Sorted Array...
+        System.out.println("Sorted array: " + Arrays.toString(sortedarray));
+    }
+}`;
+
+            document.getElementById('codeBlock').textContent = project1Code;
+            document.getElementById('codeModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            return false;
+        }
+
+        function closeModal() {
+            document.getElementById('codeModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('codeModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Make functions available globally
+        window.showProject1Code = showProject1Code;
+        window.closeModal = closeModal;
+
+        // Project Modal Functions
+        let currentProject = 1;
+        let projectFiles = [];
+        
+        function openProjectPage(projectNumber) {
+            currentProject = projectNumber;
+            document.getElementById('projectTitle').textContent = `Project ${projectNumber} - Add Details`;
+            document.getElementById('projectModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Clear previous data
+            document.getElementById('projectTitleInput').value = '';
+            document.getElementById('projectDescription').value = '';
+            document.getElementById('projectLink').value = '';
+            document.getElementById('fileList').innerHTML = '';
+            projectFiles = [];
+        }
+        
+        function closeProjectModal() {
+            document.getElementById('projectModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // File handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput) {
+                fileInput.addEventListener('change', function(e) {
+                    handleFiles(e.target.files);
+                });
+            }
         });
+        
+        function handleFiles(files) {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '<h4 style="color:#333; margin:10px 0;">Selected Files:</h4>';
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                projectFiles.push(file);
+                
+                const fileDiv = document.createElement('div');
+                fileDiv.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:8px; background:#f0f0f0; margin:5px 0; border-radius:5px;';
+                
+                const fileInfo = document.createElement('span');
+                fileInfo.textContent = `${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = '×';
+                removeBtn.style.cssText = 'background:red; color:white; border:none; border-radius:50%; width:25px; height:25px; cursor:pointer;';
+                removeBtn.onclick = function() {
+                    projectFiles.splice(projectFiles.indexOf(file), 1);
+                    fileDiv.remove();
+                };
+                
+                fileDiv.appendChild(fileInfo);
+                fileDiv.appendChild(removeBtn);
+                fileList.appendChild(fileDiv);
+            }
+        }
+        
+        function saveProject() {
+            const title = document.getElementById('projectTitleInput').value;
+            const description = document.getElementById('projectDescription').value;
+            const link = document.getElementById('projectLink').value;
+            
+            if (!title) {
+                alert('Please enter a project title!');
+                return;
+            }
+            
+            // Here you would typically save to a server or local storage
+            // For now, we'll just show a success message
+            alert(`Project ${currentProject} saved successfully!\n\nTitle: ${title}\nFiles: ${projectFiles.length} file(s)\nDescription: ${description.substring(0,50)}${description.length > 50 ? '...' : ''}`);
+            
+            closeProjectModal();
+        }
+        
+        // Make functions global
+        window.openProjectPage = openProjectPage;
+        window.closeProjectModal = closeProjectModal;
+        window.saveProject = saveProject;
     </script>
 </body>
-
 </html>
-

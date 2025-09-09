@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project 1 - Shivakiran Nandala</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+    }
+
+    header {
+      background: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #667eea;
+    }
+
+    .back-link {
+      text-decoration: none;
+      background: #667eea;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      transition: 0.3s;
+    }
+
+    .back-link:hover {
+      background: #764ba2;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #667eea;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      line-height: 1.7;
+      color: #555;
+    }
+
+    .code-block {
+      background: #1e1e1e;
+      color: #dcdcdc;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-top: 1.5rem;
+      overflow-x: auto;
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+
+    .result-block {
+      background: #f8f9fa;
+      border-left: 5px solid #667eea;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    .result-block h2 {
+      margin-top: 0;
+      color: #764ba2;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Shivakiran Nandala</div>
+  </header>
+
+  <div class="container">
+    <h1>Project 5: Closest Pair of Points (Divide & Conquer)</h1>
+    <p>
+      This project implements the closest-pair-of-points problem in Java using a divide-and-conquer approach. The algorithm sorts points, recursively finds the best pair in each half, and checks a midline strip to achieve near-optimal performance.
+    </p>
+
+    <h2>Features:</h2>
+    <ul>
+      <li>Reads range and number of points from the user</li>
+      <li>Generates random 2D points within the given bounds</li>
+      <li>Uses Merge Sort by x-coordinate and a strip check by y-order</li>
+      <li>Includes a brute-force base case for ≤3 points</li>
+      <li>Outputs the closest two points and their Euclidean distance</li>
+    </ul>
+    </ul>
+
+    <h2>Source Code:</h2>
+    <pre class="code-block">
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
+
+class Point2D {
+    // Initializing Range as x and y... 
+    int x;
+    int y;
+
+    // calling Point2D fuction...
+    public Point2D(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+public class Divide {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Getting the boundaries from User to setup valid Square graph range...
+        System.out.print("Enter the range (minimum and maximum values) [in this Format: 0 100]: ");
+        int Minrange = scanner.nextInt();
+        int Maxrange = scanner.nextInt();
+
+        // Getting the Number of Points to generate Rndomly...
+        System.out.print("Enter how many points want to generate: ");
+        int size = scanner.nextInt();
+
+        // calling RandomPoints fuction...
+        List<Point2D> points = RandomPoints(size, Minrange, Maxrange);
+        System.out.println("\nGenerated points:");
+        for (Point2D point : points) {
+            System.out.println("(" + point.x + ", " + point.y + ")");
+        }
+
+        // Calculating the closest pair of points among the generated points...
+        Pair<Point2D, Point2D> closest = FindClosestPoints(points);
+        System.out.println("\nClosest points:");
+        System.out.println("Point 1: (" + closest.val1.x + ", " + closest.val1.y + ")");
+        System.out.println("Point 2: (" + closest.val2.x + ", " + closest.val2.y + ")");
+        System.out.println("Closest Distance: " + Distance(closest.val1, closest.val2));
+    }
+
+    // Generating required number of random points within the range...
+    public static List<Point2D> RandomPoints(int size, int Minrange, int Maxrange) {
+        List<Point2D> points = new ArrayList<>();
+        Random random = new Random();
+        for (int m = 0; m < size; m++) {
+            int x = random.nextInt(Maxrange - Minrange + 1) + Minrange;
+            int y = random.nextInt(Maxrange - Minrange + 1) + Minrange;
+            points.add(new Point2D(x, y));
+        }
+        return points;
+    }
+
+    // Applyng Divide and Conqure to finmd the closest points...
+    public static Pair<Point2D, Point2D> FindClosestPoints(List<Point2D> points) {
+        // Sorting the points by X coordinates...
+        List<Point2D> sortedPoints = MergeSort(points, true);
+        return divideAndConquer(sortedPoints);
+    }
+
+    // Divide and conqure algorithm...
+    public static Pair<Point2D, Point2D> divideAndConquer(List<Point2D> points) {
+
+        // Using recursive way/method of the points are less than 3... 
+        if (points.size() <= 3) {
+            return bruteForce(points);
+        }
+
+        int mid = points.size() / 2;
+        List<Point2D> leftHalf = points.subList(0, mid);
+        List<Point2D> rightHalf = points.subList(mid, points.size());
+
+        Pair<Point2D, Point2D> leftClosest = divideAndConquer(leftHalf);
+        Pair<Point2D, Point2D> rightClosest = divideAndConquer(rightHalf);
+
+        return Combine(points, leftClosest, rightClosest);
+    }
+
+    // Combinimg the closest pairs from the right and left halves...
+    public static Pair<Point2D, Point2D> Combine(List<Point2D> points, Pair<Point2D, Point2D> leftClosest,
+            Pair<Point2D, Point2D> rightClosest) {
+        double d1 = Distance(leftClosest.val1, leftClosest.val2);
+        double d2 = Distance(rightClosest.val1, rightClosest.val2);
+        double d;
+        Pair<Point2D, Point2D> closestPair;
+
+        // Finding the minimum distance along with the closest pair...
+        if (d1 < d2) {
+            d = d1;
+            closestPair = leftClosest;
+        } else {
+            d = d2;
+            closestPair = rightClosest;
+        }
+
+        // Creating a "strip" of points which are close to the middle line...
+        List<Point2D> strip = new ArrayList<>();
+        int l_x = points.get(points.size() / 2).x;
+
+        for (Point2D point : points) {
+            if (Math.abs(point.x - l_x) < d) {
+                strip.add(point);
+            }
+        }
+
+        // Sorting by y-coordinate
+        strip.sort(Comparator.comparingInt(p -> p.y));
+
+        for (int m = 0; m < strip.size(); m++) {
+            for (int n = m + 1; n < Math.min(m + 7, strip.size()); n++) {
+                double dist = Distance(strip.get(m), strip.get(n));
+                if (dist < d) {
+                    d = dist;
+                    closestPair = new Pair<>(strip.get(m), strip.get(n));
+                }
+            }
+        }
+
+        return closestPair;
+    }
+
+    // Using Brute force algorithm to find the closest pair of points...
+    public static Pair<Point2D, Point2D> bruteForce(List<Point2D> points) {
+        double closest = Double.POSITIVE_INFINITY;
+        Pair<Point2D, Point2D> closestPair = null;
+
+        // Comparing all possible pairs of points...
+        for (int m = 0; m < points.size(); m++) {
+            for (int n = m + 1; n < points.size(); n++) {
+                double dist = Distance(points.get(m), points.get(n));
+                if (dist < closest) {
+                    closest = dist;
+                    closestPair = new Pair<>(points.get(m), points.get(n));
+                }
+            }
+        }
+
+        return closestPair;
+    }
+
+    // Calculating the Euclidean distance between two points...
+    public static double Distance(Point2D p1, Point2D p2) {
+        return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+    }
+
+    // Using Merge sort algorithm to sort points based on x or y-coordinates...
+    public static List<Point2D> MergeSort(List<Point2D> points, boolean sortByX) {
+        if (points.size() <= 1) {
+            return points;
+        }
+
+        int mid = points.size() / 2;
+        List<Point2D> left = MergeSort(points.subList(0, mid), sortByX);
+        List<Point2D> right = MergeSort(points.subList(mid, points.size()), sortByX);
+        return Merge(left, right, sortByX);
+    }
+
+    // Merging two sorted point lists by x or y-coordinate...
+    public static List<Point2D> Merge(List<Point2D> left, List<Point2D> right, boolean sortByX) {
+        List<Point2D> merged = new ArrayList<>();
+        int m = 0;
+        int n = 0;
+
+        // Merging the two lists in sorted order...
+        while (m < left.size() && n < right.size()) {
+            if ((sortByX && left.get(m).x <= right.get(n).x) || (!sortByX && left.get(m).y <= right.get(n).y)) {
+                merged.add(left.get(m));
+                m++;
+            } else {
+                merged.add(right.get(n));
+                n++;
+            }
+        }
+
+        // Adding points from the left list...
+        while (m < left.size()) {
+            merged.add(left.get(m));
+            m++;
+        }
+
+        // Adding from the right list...
+        while (n < right.size()) {
+            merged.add(right.get(n));
+            n++;
+        }
+
+        return merged;
+    }
+}
+
+// Initialize Pair class to store the two values...
+class Pair<first, second> {
+    first val1;
+    second val2;
+
+    public Pair(first val1, second val2) {
+        this.val1 = val1;
+        this.val2 = val2;
+    }
+}
+
+    </pre>
+
+    <div class="result-block">
+      <h2>Sample Output:</h2>
+      <pre>
+Enter the range (minimum and maximum values) [in this Format: 0 100]: 0 100
+Enter how many points want to generate: 5
+
+Generated points:
+(99, 36)
+(43, 85)
+(36, 46)
+(55, 65)
+(9, 68)
+
+Closest points:
+Point 1: (43, 85)
+Point 2: (55, 65)
+Closest Distance: 23.323807579381203
+      </pre>
+    </div>
+  </div>
+</body>
+</html>

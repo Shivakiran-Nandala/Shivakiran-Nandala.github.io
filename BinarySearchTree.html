@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project 1 - Shivakiran Nandala</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+    }
+
+    header {
+      background: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #667eea;
+    }
+
+    .back-link {
+      text-decoration: none;
+      background: #667eea;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      transition: 0.3s;
+    }
+
+    .back-link:hover {
+      background: #764ba2;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #667eea;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      line-height: 1.7;
+      color: #555;
+    }
+
+    .code-block {
+      background: #1e1e1e;
+      color: #dcdcdc;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-top: 1.5rem;
+      overflow-x: auto;
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+
+    .result-block {
+      background: #f8f9fa;
+      border-left: 5px solid #667eea;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    .result-block h2 {
+      margin-top: 0;
+      color: #764ba2;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Shivakiran Nandala</div>
+  </header>
+
+  <div class="container">
+    <h1>Project 3: Binary Search Tree</h1>
+    <p>This project demonstrates a Binary Search Tree in Java with core operations-insert, search, delete, and inorder traversal-plus handy utilities like printing values within a range and exporting the tree as a Graphviz DOT file for visualization.</p>
+
+    <h2>Features:</h2>
+    <ul>
+      <li>Builds a BST from user-provided integers</li>
+      <li>Inorder traversal (prints keys in sorted order)</li>
+      <li>Search a key (returns Found / Not Found)</li>
+      <li>Delete a key (handles leaf, one-child, and two-children via inorder successor)</li>
+      <li>Range query: print all keys in [X, Y]</li>
+      <li>Root-to-leaf paths utility (available as methods)</li>
+      <li>DOT export: writes bst.dot so you can visualize the tree (dot -Tpng bst.dot -o bst.png)</li>
+    </ul>
+
+    <h2>Source Code:</h2>
+    <pre class="code-block">
+import java.util.*;
+import java.io.*;
+
+//created a public class with file name BinarySearchTree
+public class BinarySearchTree {
+    // created a method with a name Node
+
+    public static class Node {
+        // defining Node class with variable(data; left; right)
+        int data;
+        Node left;
+        Node right;
+
+        Node(int data) {
+            this.data = data;
+
+        }
+    }
+
+    // creating a function which can insert the values in binary search tree
+    public static Node insert(Node root, int value) {
+        // if root is null condition where the value can insert
+        if (root == null) {
+            root = new Node(value);
+            return root;
+        }
+        // if root value is greater than inserting value then giving a condition to
+        // insert value in left
+        else if (root.data > value) {
+            root.left = insert(root.left, value);
+            // if root value is smaller than inserting value then giving a condition to
+            // insert value in right
+        } else {
+            root.right = insert(root.right, value);
+        }
+
+        return root;
+    }
+
+    // for verifying the tree, created a inorder traversal
+    public static void inorder(Node root) {
+        if (root == null) {
+            return;
+        }
+        inorder(root.left);
+        System.out.println(root.data + "");
+        inorder(root.right);
+    }
+
+    // For searching any value in a tree, created search with type boolean as true
+    // or false
+
+    public static boolean search(Node root, int key) {
+        if (root == null) {
+            return false;
+        } else if (root.data > key) {
+            return search(root.left, key);
+        } else if (root.data == key) {
+            return true;
+        } else {
+            return search(root.right, key);
+        }
+    }
+
+    // For deleteing any value in a tree
+    public static Node delete(Node root, int value) {
+
+        if (root.data > value) {
+            root.left = delete(root.left, value);
+        } else if (root.data < value) {
+            root.right = delete(root.right, value);
+        } else {
+            // 1
+            if (root.left == null && root.right == null) {
+                return null;
+            }
+            // 2
+            if (root.left == null) {
+                return root.right;
+            } else if (root.right == null) {
+                return root.left;
+            }
+            // 3
+            Node Is = inorderSucessor(root.right);
+            root.data = Is.data;
+            root.right = delete(root.right, Is.data);
+
+        }
+        return root;
+    }
+
+    // created a function to find inorderSucessor
+    public static Node inorderSucessor(Node root) {
+        while (root.left != null) {
+            root = root.left;
+        }
+        return root;
+    }
+
+    public static void printInRange(Node root, int X, int Y) {
+        if (root == null) {
+            return;
+        }
+        if (root.data >= X && root.data <= Y) {
+            printInRange(root.left, X, Y);
+            System.out.print(root.data + "");
+            printInRange(root.right, X, Y);
+        } else if (root.data >= Y) {
+            printInRange(root.left, X, Y);
+        } else {
+            printInRange(root.right, X, Y);
+        }
+    }
+
+    public static void printPath(ArrayList<Integer> path) {
+        for (int i = 0; i < path.size(); i++) {
+            System.out.print(path.get(i) + "->");
+
+        }
+        System.out.println();
+    }
+
+    public static void printRoot2Leaf(Node root, ArrayList<Integer> path) {
+        if (root == null) {
+            return;
+        }
+        path.add(root.data);
+        if (root.left == null && root.right == null) {
+            printPath(path);
+        } else {
+            printRoot2Leaf(root.left, path);
+            printRoot2Leaf(root.right, path);
+        }
+        path.remove(path.size() - 1);
+    }
+
+    public void printBSTDot(Node node, String filename) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+
+            writer.write("digraph BST {\n");
+            writer.write("    node [shape=circle];\n");
+
+            printBSTDotUtil(node, writer);
+
+            writer.write("}\n");
+
+            writer.close();
+
+            System.out.println("BST dot file generated successfully.");
+        } catch (IOException e) {
+            System.out.println("Error writing dot file: " + e.getMessage());
+        }
+    }
+
+    private void printBSTDotUtil(Node node, BufferedWriter writer) throws IOException {
+        if (node != null) {
+            writer.write("    " + node.data + ";\n");
+
+            if (node.left != null) {
+                writer.write("    " + node.data + " -> " + node.left.data + " [label=\"L\"];\n");
+                printBSTDotUtil(node.left, writer);
+            }
+
+            if (node.right != null) {
+                writer.write("    " + node.data + " -> " + node.right.data + " [label=\"R\"];\n");
+                printBSTDotUtil(node.right, writer);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+
+        /// Taking Inputs [Number of Elements
+        System.out.print("Enter total number the elements: ");
+
+        // Creating InputArray of Length a
+        int n = input.nextInt();
+
+        // Defining array of A is equal to the count of array
+        int[] A = new int[n];
+        // creating Node type of root with defining it as null
+        Node root = null;
+        // Taking Inputs Values from the User
+        System.out.print("Enter the values:");
+
+        // Storing Values in Array
+        for (int i = 0; i < n; i++) {
+            A[i] = input.nextInt();
+            System.out.println("Input array: " + Arrays.toString(A));
+        }
+        // creating a loop which will traverse
+        for (int i = 0; i < A.length; i++) {
+            root = insert(root, A[i]);
+        }
+
+        // call for inorder
+        inorder(root);
+       
+        // Search to find the value in the tree
+        System.out.println("Enter a value to be find: ");
+        int searchValue = input.nextInt();
+
+        if (search(root, searchValue)) {
+            System.out.println("Result:" + "Found");
+        } else {
+            System.out.println("Result:" + "Not Found");
+        }
+
+        // To find a range between min.value & max.value from the tree
+        System.out.println("Enter the X values to find the range: ");
+        int X = input.nextInt();
+        System.out.println("Enter the Y values to find the range: ");
+        int Y = input.nextInt();
+        System.out.print("Range: ");
+        printInRange(root, X, Y);
+
+        // deleting a value from the tree after sorting and other opertions
+        System.out.println("Enter a value want to delete: ");
+        int deleteValue = input.nextInt();
+        root = delete(root, deleteValue);
+        System.out.print("Remaining values after deleting the entered value: ");
+        inorder(root);
+
+        BinarySearchTree tree = new BinarySearchTree();
+        tree.printBSTDot(root, "bst.dot");
+
+    }
+
+    </pre>
+
+    <div class="result-block">
+      <h2>Sample Output:</h2>
+      <pre>
+Enter total number the elements: 6
+Enter the values:30
+Input array: [30, 0, 0, 0, 0, 0]
+50
+Input array: [30, 50, 0, 0, 0, 0]
+70
+Input array: [30, 50, 70, 0, 0, 0]
+20
+Input array: [30, 50, 70, 20, 0, 0]
+40
+Input array: [30, 50, 70, 20, 40, 0]
+60
+Input array: [30, 50, 70, 20, 40, 60]
+20
+30
+40
+50
+60
+70
+Enter a value to be find:
+40
+Result:Found
+Enter the X values to find the range:
+25
+Enter the Y values to find the range: 
+65
+Range: 30405060Enter a value want to delete: 
+30
+Remaining values after deleting the entered value: 20
+40
+50
+60
+70
+BST dot file generated successfully.
+      </pre>
+    </div>
+  </div>
+</body>
+</html>

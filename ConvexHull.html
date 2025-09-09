@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project 1 - Shivakiran Nandala</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+    }
+
+    header {
+      background: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #667eea;
+    }
+
+    .back-link {
+      text-decoration: none;
+      background: #667eea;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      transition: 0.3s;
+    }
+
+    .back-link:hover {
+      background: #764ba2;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #667eea;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      line-height: 1.7;
+      color: #555;
+    }
+
+    .code-block {
+      background: #1e1e1e;
+      color: #dcdcdc;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-top: 1.5rem;
+      overflow-x: auto;
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+
+    .result-block {
+      background: #f8f9fa;
+      border-left: 5px solid #667eea;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    .result-block h2 {
+      margin-top: 0;
+      color: #764ba2;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Shivakiran Nandala</div>
+  </header>
+
+  <div class="container">
+    <h1>Project 6: Convex Hull (Graham Scan) Implementation</h1>
+    <p>
+      This project demonstrates the implementation of the Convex Hull problem in Java using the Graham Scan algorithm. It identifies the smallest convex polygon enclosing a set of 2D points by anchoring at the leftmost-lowest point, sorting by polar angle, and using a stack-based left-turn test.
+    </p>
+
+    <h2>Features:</h2>
+    <ul>
+      <li>Reads range and number of points from the user</li>
+      <li>Generates random 2D points within the given bounds</li>
+      <li>Finds anchor (leftmost-lowest) and sorts by polar angle</li>
+      <li>Builds the hull using a stack and left-turn orientation test</li>
+      <li>Outputs hull points in counter-clockwise order (≈ O(n log n))</li>
+    </ul>
+
+    <h2>Source Code:</h2>
+    <pre class="code-block">
+// Importing Libraries to read and Process Code...
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.Stack;
+
+// Defining the Points in 2D...
+class Point2D {
+    int x;
+    int y;
+
+    public Point2D(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+// Implimenting Convex Hull in main ...
+public class ConvexHull {
+    public static void main(String[] args) {
+        try (Scanner scanner = new Scanner(System.in)) {
+            // Getting Range from user...
+            System.out.print("Enter the range (minimum and maximum values) [in this Format: 0 100]: ");
+            int Minrange = scanner.nextInt();
+            int Maxrange = scanner.nextInt();
+
+            // Number of Points to generate...
+            System.out.print("Enter how many points want to generate: ");
+            int size = scanner.nextInt();
+
+            // Displaying the randomly Generated points...
+            List<Point2D> points = RandomPoints(size, Minrange, Maxrange);
+            System.out.println("\nGenerated points:");
+            for (Point2D point : points) {
+                System.out.println("(" + point.x + ", " + point.y + ")");
+            }
+
+            // Displaying the Convex Hull points...
+            List<Point2D> convexHullPoints = GrahamScan(points);
+            System.out.println("\nConvex Hull Points:");
+            for (Point2D point : convexHullPoints) {
+                System.out.println("(" + point.x + ", " + point.y + ")");
+            }
+        }
+    }
+
+    // Convex Hulll to generate Random points within the Range...
+    public static List<Point2D> RandomPoints(int size, int Minrange, int Maxrange) {
+        List<Point2D> points = new ArrayList<>();
+        Random random = new Random();
+        for (int m = 0; m < size; m++) {
+            int x = random.nextInt(Maxrange - Minrange + 1) + Minrange;
+            int y = random.nextInt(Maxrange - Minrange + 1) + Minrange;
+            points.add(new Point2D(x, y));
+        }
+        return points;
+    }
+
+    // Graham Scan method for finding the convex hull points from random points...
+    public static List<Point2D> GrahamScan(List<Point2D> points) {
+        Point2D p0 = findLeftmostLowestPoint(points);
+        List<Point2D> sortedPoints = sortPointsByPolarAngle(points, p0);
+        Stack<Point2D> stack = new Stack<>();
+
+        stack.push(p0);
+        stack.push(sortedPoints.get(0));
+        stack.push(sortedPoints.get(1));
+
+        for (int i = 2; i < sortedPoints.size(); i++) {
+            while (stack.size() >= 2
+                    && !turnsLeft(stack.elementAt(stack.size() - 2), stack.peek(), sortedPoints.get(i))) {
+                stack.pop();
+            }
+            stack.push(sortedPoints.get(i));
+        }
+
+        return new ArrayList<>(stack);
+    }
+
+    // implimenting leftmostlowestpoint method to find the left most point from the input points...
+    public static Point2D findLeftmostLowestPoint(List<Point2D> points) {
+        Point2D leftmostLowest = points.get(0);
+        for (int i = 1; i < points.size(); i++) {
+            Point2D currentPoint = points.get(i);
+            if (currentPoint.y < leftmostLowest.y
+                    || (currentPoint.y == leftmostLowest.y && currentPoint.x < leftmostLowest.x)) {
+                leftmostLowest = currentPoint;
+            }
+        }
+        return leftmostLowest;
+    }
+
+    // implimenting sortPointsByPolarAngle method to sort the input points based on the polar angle from the left most point...
+    public static List<Point2D> sortPointsByPolarAngle(List<Point2D> points, Point2D p0) {
+        List<Point2D> sortedPoints = new ArrayList<>(points);
+        // to compare the polar angles...
+        sortedPoints.sort(new PolarAngleComparator(p0));
+        return sortedPoints;
+    }
+
+    // determining to make a left turn or not from given three points...
+    public static boolean turnsLeft(Point2D p1, Point2D p2, Point2D p3) {
+        return (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x) > 0;
+    }
+
+    // To implement PolarAngleComparator on the Polar angles of the points w.r.t left most point...
+
+    static class PolarAngleComparator implements Comparator<Point2D> {
+        private Point2D p0;
+
+        public PolarAngleComparator(Point2D p0) {
+            this.p0 = p0;
+        }
+
+        @Override
+        public int compare(Point2D p1, Point2D p2) {
+            int angleComparison = Double.compare(polarAngle(p0, p1), polarAngle(p0, p2));
+            if (angleComparison == 0) {
+                // If two points have the same polar angle, the one closer to p0 comes first
+                double dist1 = distance(p0, p1);
+                double dist2 = distance(p0, p2);
+                return Double.compare(dist1, dist2);
+            }
+            return angleComparison;
+        }
+
+        private double polarAngle(Point2D p0, Point2D p) {
+            double dx = p.x - p0.x;
+            double dy = p.y - p0.y;
+            return Math.atan2(dy, dx);
+        }
+
+        private double distance(Point2D p1, Point2D p2) {
+            return Math.sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
+        }
+    }
+}
+
+    </pre>
+
+    <div class="result-block">
+      <h2>Sample Output:</h2>
+      <pre>
+Enter the range (minimum and maximum values) [in this Format: 0 100]: 0 100
+Enter how many points want to generate: 4
+
+Generated points:
+(5, 30)
+(70, 100)
+(44, 73)
+(28, 71)
+
+Convex Hull Points:
+(5, 30)
+(5, 30)
+(70, 100)
+(28, 71)
+      </pre>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import { Mail, Phone, MapPin, Linkedin, Download, FileText, Calendar, Award, Briefcase, GraduationCap, Code, ChevronDown, ExternalLink } from 'lucide-react';
 
